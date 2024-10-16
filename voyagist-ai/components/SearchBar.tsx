@@ -1,11 +1,7 @@
 import { useState } from 'react';
 import { Search } from 'lucide-react';
 
-interface SearchBarProps {
-  onSearch?: (query: string) => void;
-}
-
-export function SearchBar({ onSearch }: SearchBarProps) {
+export function SearchBar({ onSearch }: { onSearch: (query: string) => void }) {
   const [query, setQuery] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -23,13 +19,13 @@ export function SearchBar({ onSearch }: SearchBarProps) {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search anything..."
-        className="w-full p-4 pr-12 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full p-4 pr-12 rounded-lg border border-gray-700 bg-gray-900 text-gray-300 focus:outline-none focus:ring-2 focus:ring-green-700"
       />
       <button
         type="submit"
         className="absolute right-3 top-1/2 transform -translate-y-1/2"
       >
-        <Search className="text-gray-400" />
+        <Search className="text-green-700 hover:text-green-600" />
       </button>
     </form>
   );

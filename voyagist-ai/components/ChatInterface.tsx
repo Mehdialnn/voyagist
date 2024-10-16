@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { SearchBar } from './SearchBar';
 import { ChatMessage } from './ChatMessage';
 import { useAppContext } from '@/context/AppContext';
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function ChatInterface({ setIsLoading }: { setIsLoading: (loading: boolean) => void }) {
   const [messages, setMessages] = useState<Array<{ type: 'user' | 'ai'; content: string }>>([]);
@@ -25,7 +26,6 @@ export function ChatInterface({ setIsLoading }: { setIsLoading: (loading: boolea
       const data = await response.json();
       setMessages(prev => [...prev, { type: 'ai', content: data.content }]);
 
-      // Assuming the AI response includes hotel search results
       if (data.hotelResults) {
         setSearchResults(data.hotelResults);
       }
@@ -38,13 +38,13 @@ export function ChatInterface({ setIsLoading }: { setIsLoading: (loading: boolea
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex-grow overflow-y-auto p-4">
+    <div className="flex flex-col h-full bg-[#121212]">
+      <ScrollArea className="flex-grow p-4">
         {messages.map((message, index) => (
           <ChatMessage key={index} type={message.type} content={message.content} />
         ))}
-      </div>
-      <div className="p-4 border-t">
+      </ScrollArea>
+      <div className="p-4 border-t border-[#2A2A2A]">
         <SearchBar onSearch={handleSearch} />
       </div>
     </div>

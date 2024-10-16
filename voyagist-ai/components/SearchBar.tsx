@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Search } from 'lucide-react';
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export function SearchBar({ onSearch }: { onSearch: (query: string) => void }) {
   const [query, setQuery] = useState('');
@@ -14,19 +16,21 @@ export function SearchBar({ onSearch }: { onSearch: (query: string) => void }) {
 
   return (
     <form onSubmit={handleSubmit} className="relative">
-      <input
+      <Input
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search anything..."
-        className="w-full p-4 pr-12 rounded-lg border border-gray-700 bg-gray-900 text-gray-300 focus:outline-none focus:ring-2 focus:ring-green-700"
+        className="w-full pr-12 bg-[#1E1E1E] text-[#E0E0E0] border-[#2A2A2A] focus:ring-[#1E5631] focus:border-[#1E5631]"
       />
-      <button
+      <Button
         type="submit"
-        className="absolute right-3 top-1/2 transform -translate-y-1/2"
+        variant="ghost"
+        size="icon"
+        className="absolute right-0 top-0 h-full"
       >
-        <Search className="text-green-700 hover:text-green-600" />
-      </button>
+        <Search className="h-4 w-4 text-[#1E5631]" />
+      </Button>
     </form>
   );
 }

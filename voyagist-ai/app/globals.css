@@ -3,20 +3,20 @@
 @tailwind utilities;
 
 :root {
-  --background: 0 0% 0%;
+  --background: 0 0% 7%;
   --foreground: 0 0% 98%;
-  --primary: 120 61% 24%; /* Dark green */
+  --primary: 142 72% 29%;
   --primary-foreground: 0 0% 98%;
-  --secondary: 240 3.7% 15.9%; /* Dark grey */
+  --secondary: 240 3.7% 15.9%;
   --secondary-foreground: 0 0% 98%;
-  --accent: 120 61% 24%; /* Dark green */
+  --accent: 142 72% 29%;
   --accent-foreground: 0 0% 98%;
-  --font-sans: 'Space Grotesk', sans-serif;
+  --font-sans: 'Inter', sans-serif;
 }
 
 body {
   @apply bg-background text-foreground;
-  font-feature-settings: "ss01" 1, "ss02" 1, "ss03" 1, "ss04" 1;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
 @layer utilities {
@@ -32,4 +32,17 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Custom styles for a more modern look */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-bold tracking-tight;
+}
+
+button, .button {
+  @apply font-medium transition-colors duration-200;
+}
+
+input, select, textarea {
+  @apply bg-secondary text-secondary-foreground;
 }

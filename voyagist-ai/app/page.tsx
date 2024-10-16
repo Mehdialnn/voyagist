@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { ChatInterface } from "@/components/ChatInterface";
@@ -26,9 +28,15 @@ export default function Home() {
           <nav>
             {user ? (
               <>
-                <Link href="/profile" className="mr-4">Profile</Link>
-                <Link href="/past-searches" className="mr-4">Past Searches</Link>
-                <Link href="/preferences" className="mr-4">Preferences</Link>
+                <Link href="/profile" className="mr-4">
+                  Profile
+                </Link>
+                <Link href="/past-searches" className="mr-4">
+                  Past Searches
+                </Link>
+                <Link href="/preferences" className="mr-4">
+                  Preferences
+                </Link>
               </>
             ) : (
               <Auth />

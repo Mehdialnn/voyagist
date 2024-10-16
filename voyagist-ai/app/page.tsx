@@ -28,6 +28,8 @@ import {
   Calendar as CalendarIcon,
   Users,
 } from "lucide-react";
+import { searchHotels, HotelSearchParams } from "@/lib/amadeus";
+import { getAIResponse } from "@/lib/langchain";
 
 export default function VoyagistStaySearch() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,15 +38,44 @@ export default function VoyagistStaySearch() {
     undefined
   );
   const [guests, setGuests] = useState("1");
+  const [aiResponse, setAiResponse] = useState<string>("");
+  const [hotelRecommendations, setHotelRecommendations] = useState<any[]>([]);
 
-  const handleSearch = (e: React.FormEvent) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Searching for accommodations:", {
-      searchQuery,
-      arrivalDate,
-      departureDate,
-      guests,
-    });
+    setIsLoading(true);
+
+    try {
+      // Get AI response
+      const aiRes = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: searchQuery }),
+      });
+      const aiData: HotelSearchParams = await aiRes.json();
+      setAiResponse(JSON.stringify(aiData, null, 2));
+
+      // Search for hotels
+      if (aiData.cityCode && aiData.checkInDate && aiData.checkOutDate) {
+        const hotelRes = await fetch('/api/hotels', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(aiData),
+        });
+        const hotelData = await hotelRes.json();
+        setHotelRecommendations(hotelData);
+      } else {
+        console.error('Missing required parameters for hotel search');
+        // Handle error (e.g., show error message to user)
+      }
+    } catch (error) {
+      console.error('Search error:', error);
+      // Handle error (e.g., show error message to user)
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleArrivalDateChange = (date: Date | undefined) => {
@@ -246,6 +277,26 @@ export default function VoyagistStaySearch() {
           </Button>
         </div>
       </div>
+      {aiResponse && (
+        <div className="mt-4 p-4 bg-[#1E1E1E] rounded-lg">
+          <h2 className="text-xl font-bold mb-2">AI Response:</h2>
+          <pre className="whitespace-pre-wrap">{aiResponse}</pre>
+        </div>
+      )}
+      {hotelRecommendations.length > 0 && (
+        <div className="mt-4 p-4 bg-[#1E1E1E] rounded-lg">
+          <h2 className="text-xl font-bold mb-2">Hotel Recommendations:</h2>
+          <ul>
+            {hotelRecommendations.map((hotel, index) => (
+              <li key={index} className="mb-2">
+                <h3 className="font-bold">{hotel.hotel.name}</h3>
+                <p>Price: {hotel.offers[0].price.total} {hotel.offers[0].price.currency}</p>
+                {/* Add more hotel details as needed */}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
